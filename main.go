@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/meganlee18/ticket-search-app/cmd"
+import "../ticket_search_app/cmd"
 
 func main() {
 	cmd.Execute()
