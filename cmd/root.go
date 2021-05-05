@@ -16,8 +16,11 @@ limitations under the License.
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -40,17 +43,90 @@ var rootCmd = &cobra.Command{
 
 			//Ask user what they would like e.g users, tickets, org
 			//Depend on input, call various functions
+			fmt.Println("Welcome to Ticket Search App!\n\nSelect search options:\n - Press 1 to start searching\n - Press 2 to view a list of searchable fields")
+			var searchOptions int
 
-			//if user asks for tickets, call this
-			app.ReadTickets()
+			fmt.Scanln(&searchOptions)
+			if searchOptions == 1 {
+				fmt.Println("Select 1) Users or 2) Tickets or 3) Organizations")
+				var options int
+				fmt.Scanln(&options)
 
-			//if user asks for users, call this
-			//app.
-			app.ReadUsers()
+				if options == 1 {
+					////if user asks for tickets, call this
+					//app.DisplayTickets()
+					//
+					////if user asks for users, call this
+					////app.
+					//app.DisplayUsers()
+					//
+					////if users asks for organizations, call this
+					//app.DisplayOrganizations()
+				}
+			}
 
-			//if users asks for organizations, call this
-			app.ReadOrganizations()
+			if searchOptions == 2 {
+				//return user fields e.g id, name etc
+				fmt.Println("----------------------\nYou can search Users with:")
+				readFields("./tickets/users.json")
+
+				fmt.Println("----------------------\nYou can search Tickets with:")
+				readFields("./tickets/tickets.json")
+
+				fmt.Println("----------------------\nYou can search Organizations with:")
+				readFields("./tickets/organizations.json")
+			}
 		},
+}
+
+func readFields(path string) {
+	var result []map[string]interface{}
+
+	data := app.ReadFile(path)
+	unmarshalledResult, err := unmarshalData(data, result)
+	if err != nil {
+		fmt.Println("error: ", err)
+	}
+
+	sortedFields := displaySortedFields(unmarshalledResult)
+	fmt.Println(strings.Join(removeDuplicateValues(sortedFields),  "\n"))
+}
+
+func unmarshalData(data []byte, result []map[string]interface{}) ([]map[string]interface{}, error) {
+	err := json.Unmarshal(data, &result)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return nil, err
+	}
+
+	return result, err
+}
+
+func displaySortedFields(result []map[string]interface{}) []string {
+	var fields []string
+
+	for _, v := range result {
+		for k := range v {
+			fields = append(fields, k)
+		}
+	}
+
+	sort.Strings(fields)
+	return fields
+}
+
+
+func removeDuplicateValues(fields []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+
+	for _, entry := range fields {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
