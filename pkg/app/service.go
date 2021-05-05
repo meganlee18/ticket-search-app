@@ -60,16 +60,11 @@ type Organizations struct {
 	Tags          []string `json:"tags"`
 }
 
-func ReadTickets() []Ticket {
+func DisplayTickets() []Ticket {
 	var obj []Ticket
 
-	data, err := ioutil.ReadFile("./tickets/tickets.json")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	err = json.Unmarshal(data, &obj)
+	data := ReadFile("./tickets/tickets.json")
+	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
@@ -77,36 +72,39 @@ func ReadTickets() []Ticket {
 	return obj
 }
 
-func ReadUsers() []User {
+func DisplayUsers() []User {
 	var obj []User
 
-	data, err := ioutil.ReadFile("./tickets/users.json")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	data := ReadFile("./tickets/users.json")
 
-	err = json.Unmarshal(data, &obj)
+	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-
+	fmt.Println(obj)
 	return obj
 }
 
-func ReadOrganizations() []Organizations {
+func DisplayOrganizations() []Organizations {
 	var obj []Organizations
 
-	data, err := ioutil.ReadFile("./tickets/organizations.json")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	err = json.Unmarshal(data, &obj)
+	data := ReadFile("./tickets/organizations.json")
+	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
 
 	return obj
 }
+
+func ReadFile(path string) []byte {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return data
+}
+
+
