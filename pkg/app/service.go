@@ -62,10 +62,10 @@ type Organizations struct {
 	Tags          []string `json:"tags"`
 }
 
-func DisplayTickets() []Ticket {
+func DisplayTickets(path string) []Ticket {
 	var obj []Ticket
 
-	data := ReadFile("./tickets/tickets.json")
+	data := readFile(path)
 	err := json.Unmarshal(data, &obj)
 	if err != nil {
 		fmt.Println("error:", err)
@@ -74,32 +74,20 @@ func DisplayTickets() []Ticket {
 	return obj
 }
 
-func DisplayUsers() []User {
-	var obj []User
+func DisplayTicketFields(path string) {
+	var result []map[string]interface{}
 
-	data := ReadFile("./tickets/users.json")
-
-	err := json.Unmarshal(data, &obj)
+	data := readFile(path)
+	unmarshalledResult, err := unmarshalData(data, result)
 	if err != nil {
-		fmt.Println("error:", err)
-	}
-	fmt.Println(obj)
-	return obj
-}
-
-func DisplayOrganizations() []Organizations {
-	var obj []Organizations
-
-	data := ReadFile("./tickets/organizations.json")
-	err := json.Unmarshal(data, &obj)
-	if err != nil {
-		fmt.Println("error:", err)
+		fmt.Println("error: ", err)
 	}
 
-	return obj
+	sortedFields := displaySortedFields(unmarshalledResult)
+	fmt.Println(strings.Join(removeDuplicateValues(sortedFields),  "\n"))
 }
 
-func ReadFile(path string) []byte {
+func readFile(path string) []byte {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)

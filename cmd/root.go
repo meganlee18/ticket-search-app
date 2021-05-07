@@ -53,21 +53,20 @@ var rootCmd = &cobra.Command{
 				fmt.Scanln(&options)
 
 				if options == 1 {
-					////if user asks for tickets, call this
-					//app.DisplayTickets()
+					//TODO: if user asks for tickets, call this
+					//app.DisplayTickets("./tickets/tickets.json")
 					//
-					////if user asks for users, call this
-					////app.
-					//app.DisplayUsers()
+					//TODO: if user asks for users, call this
+					//app.DisplayTickets("./tickets/users.json")
 					//
-					////if users asks for organizations, call this
-					//app.DisplayOrganizations()
+					//TODO: if users asks for organizations, call this
+					//app.DisplayTickets("./tickets/organizations.json")
 				}
 			}
 
 			if searchOptions == 2 {
 				fmt.Println("----------------------\nYou can search Users with:")
-				readFields("./tickets/users.json")
+				app.DisplayTicketFields("./tickets/users.json")
 
 				fmt.Println("----------------------\nYou can search Tickets with:")
 				app.DisplayTicketFields("./tickets/tickets.json")
