@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
+	"strings"
 )
 
 type Ticket struct {
@@ -105,6 +107,43 @@ func ReadFile(path string) []byte {
 	}
 
 	return data
+}
+
+func unmarshalData(data []byte, result []map[string]interface{}) ([]map[string]interface{}, error) {
+	err := json.Unmarshal(data, &result)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return nil, err
+	}
+
+	return result, err
+}
+
+func displaySortedFields(result []map[string]interface{}) []string {
+	var fields []string
+
+	for _, v := range result {
+		for k := range v {
+			fields = append(fields, k)
+		}
+	}
+
+	sort.Strings(fields)
+	return fields
+}
+
+func removeDuplicateValues(fields []string) []string {
+	keys := make(map[string]bool)
+	var list []string
+
+	for _, entry := range fields {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+
+	return list
 }
 
 

@@ -16,11 +16,8 @@ limitations under the License.
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"sort"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -47,6 +44,9 @@ var rootCmd = &cobra.Command{
 			var searchOptions int
 
 			fmt.Scanln(&searchOptions)
+
+			//TODO: refactor this to switch statement for readability
+			//TODO: Also pull this out to separate function
 			if searchOptions == 1 {
 				fmt.Println("Select 1) Users or 2) Tickets or 3) Organizations")
 				var options int
@@ -66,67 +66,16 @@ var rootCmd = &cobra.Command{
 			}
 
 			if searchOptions == 2 {
-				//return user fields e.g id, name etc
 				fmt.Println("----------------------\nYou can search Users with:")
 				readFields("./tickets/users.json")
 
 				fmt.Println("----------------------\nYou can search Tickets with:")
-				readFields("./tickets/tickets.json")
+				app.DisplayTicketFields("./tickets/tickets.json")
 
 				fmt.Println("----------------------\nYou can search Organizations with:")
-				readFields("./tickets/organizations.json")
+				app.DisplayTicketFields("./tickets/organizations.json")
 			}
 		},
-}
-
-func readFields(path string) {
-	var result []map[string]interface{}
-
-	data := app.ReadFile(path)
-	unmarshalledResult, err := unmarshalData(data, result)
-	if err != nil {
-		fmt.Println("error: ", err)
-	}
-
-	sortedFields := displaySortedFields(unmarshalledResult)
-	fmt.Println(strings.Join(removeDuplicateValues(sortedFields),  "\n"))
-}
-
-func unmarshalData(data []byte, result []map[string]interface{}) ([]map[string]interface{}, error) {
-	err := json.Unmarshal(data, &result)
-	if err != nil {
-		fmt.Println("Error: ", err)
-		return nil, err
-	}
-
-	return result, err
-}
-
-func displaySortedFields(result []map[string]interface{}) []string {
-	var fields []string
-
-	for _, v := range result {
-		for k := range v {
-			fields = append(fields, k)
-		}
-	}
-
-	sort.Strings(fields)
-	return fields
-}
-
-
-func removeDuplicateValues(fields []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-
-	for _, entry := range fields {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
