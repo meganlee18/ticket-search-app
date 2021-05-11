@@ -62,8 +62,8 @@ type Organizations struct {
 	Tags          []string `json:"tags"`
 }
 
-func DisplayTickets(path string) []Ticket {
-	var obj []Ticket
+func DisplayUsers(path string) []User {
+	var obj []User
 
 	data := readFile(path)
 	err := json.Unmarshal(data, &obj)
@@ -72,6 +72,26 @@ func DisplayTickets(path string) []Ticket {
 	}
 
 	return obj
+}
+
+func DisplayUsersBasedOnSearchOptions(path string, searchValue int) string {
+	tickets := DisplayUsers(path)
+	var results []User
+	var users string
+
+	for _, ticket := range tickets {
+		if ticket.ID == searchValue {
+			 results = append(results, ticket)
+		}
+	}
+
+	//TODO: Change return type to map and include dd ticket fields as well
+	for _, result := range results {
+		users = fmt.Sprintf("%v\n %s\n %s\n %s\n %s\n %s\n %t\n %t\n %t\n %s\n %s\n %s\n %s\n %s\n %s\n %v\n %v\n %t\n %s\n", result.ID, result.Url, result.ExternalId, result.Name, result.Alias, result.CreatedAt, result.Active, result.Verified, result.Shared, result.Locale, result.Timezone, result.LastLoginAt, result.Email, result.Phone, result.Signature, result.OrganizationID, result.Tags, result.Suspended, result.Role)
+	}
+
+	fmt.Println(users)
+	return users
 }
 
 func DisplayTicketFields(path string) {

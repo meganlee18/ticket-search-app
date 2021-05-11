@@ -53,14 +53,19 @@ var rootCmd = &cobra.Command{
 				fmt.Scanln(&options)
 
 				if options == 1 {
-					//TODO: if user asks for tickets, call this
-					//app.DisplayTickets("./tickets/tickets.json")
-					//
-					//TODO: if user asks for users, call this
-					//app.DisplayTickets("./tickets/users.json")
-					//
-					//TODO: if users asks for organizations, call this
-					//app.DisplayTickets("./tickets/organizations.json")
+					path := "./tickets/users.json"
+					//TODO: depending on search options, return search results either user, ticket or org
+					fmt.Println("Enter search term e.g _id or name")
+
+					//check search term and see if it matches field
+					var searchTerm string
+					fmt.Scanln(&searchTerm)
+
+					fmt.Println("Enter search value e.g 71")
+					var searchValue int
+					fmt.Scanln(&searchValue)
+
+					app.DisplayUsersBasedOnSearchOptions(path, searchValue)
 				}
 			}
 
