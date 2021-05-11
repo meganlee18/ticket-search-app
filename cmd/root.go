@@ -38,7 +38,7 @@ var rootCmd = &cobra.Command{
 	// has an action associated with it:
 		Run: func(cmd *cobra.Command, args []string) {
 
-			//Ask user what they would like e.g users, tickets, org
+			//Ask user what they would like e.g users, files, org
 			//Depend on input, call various functions
 			fmt.Println("Welcome to Ticket Search App!\n\nSelect search options:\n - Press 1 to start searching\n - Press 2 to view a list of searchable fields")
 			var searchOptions int
@@ -53,7 +53,7 @@ var rootCmd = &cobra.Command{
 				fmt.Scanln(&options)
 
 				if options == 1 {
-					path := "./tickets/users.json"
+					path := "./files/users.json"
 					//TODO: depending on search options, return search results either user, ticket or org
 					fmt.Println("Enter search term e.g _id or name")
 
@@ -71,13 +71,13 @@ var rootCmd = &cobra.Command{
 
 			if searchOptions == 2 {
 				fmt.Println("----------------------\nYou can search Users with:")
-				app.DisplayTicketFields("./tickets/users.json")
+				app.DisplayAllResultFields("./files/users.json")
 
 				fmt.Println("----------------------\nYou can search Tickets with:")
-				app.DisplayTicketFields("./tickets/tickets.json")
+				app.DisplayAllResultFields("./files/files.json")
 
 				fmt.Println("----------------------\nYou can search Organizations with:")
-				app.DisplayTicketFields("./tickets/organizations.json")
+				app.DisplayAllResultFields("./files/organizations.json")
 			}
 		},
 }
