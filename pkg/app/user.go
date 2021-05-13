@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 )
 
 type User struct {
@@ -27,7 +28,6 @@ type User struct {
 	Role           string   `json:"role"`
 }
 
-
 func findUsers(path string) []User {
 	var obj []User
 
@@ -40,10 +40,10 @@ func findUsers(path string) []User {
 	return obj
 }
 
-func DisplayUsersBasedOnSearchOptions(path string, searchValue int) string {
+func DisplayUsersBasedOnSearchOptions(path string, searchValue int) map[string]interface{} {
 	tickets := findUsers(path)
 	var results []User
-	var users string
+	var outcome map[string]interface{}
 
 	for _, ticket := range tickets {
 		if ticket.ID == searchValue {
@@ -51,11 +51,45 @@ func DisplayUsersBasedOnSearchOptions(path string, searchValue int) string {
 		}
 	}
 
-	//TODO: Change return type to map and include dd ticket fields as well
 	for _, result := range results {
-		users = fmt.Sprintf("%v\n %s\n %s\n %s\n %s\n %s\n %t\n %t\n %t\n %s\n %s\n %s\n %s\n %s\n %s\n %v\n %v\n %t\n %s\n", result.ID, result.Url, result.ExternalId, result.Name, result.Alias, result.CreatedAt, result.Active, result.Verified, result.Shared, result.Locale, result.Timezone, result.LastLoginAt, result.Email, result.Phone, result.Signature, result.OrganizationID, result.Tags, result.Suspended, result.Role)
+		outcome = map[string]interface{}{
+			"_id":             result.ID,
+			"active":          result.Active,
+			"alias":           result.Alias,
+			"created_at":      result.CreatedAt,
+			"email":           result.Email,
+			"external_id":     result.ExternalId,
+			"last_login_at":   result.LastLoginAt,
+			"locale":          result.Locale,
+			"name":            result.Name,
+			"organization_id": result.OrganizationID,
+			"phone":           result.Phone,
+			"role":            result.Role,
+			"shared":          result.Shared,
+			"signature":       result.Signature,
+			"suspended":       result.Suspended,
+			"tags":            result.Tags,
+			"timezone":        result.Timezone,
+			"url":             result.Url,
+			"verified":        result.Verified,
+		}
 	}
 
-	fmt.Println(users)
-	return users
+ 	return sortMapByKey(outcome)
+}
+
+func sortMapByKey(fields map[string]interface{}) map[string]interface{} {
+	sortedMap := make(map[string]interface{})
+	keys := make([]string, 0, len(fields))
+	for k := range fields {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		sortedMap[key] = fields[key]
+		fmt.Printf("%s: %v\n", key, fields[key])
+	}
+
+	return sortedMap
 }

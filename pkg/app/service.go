@@ -6,10 +6,9 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
-	"strings"
 )
 
-func DisplayAllResultFields(path string) {
+func DisplayAllResultFields(path string) []string {
 	var result []map[string]interface{}
 
 	data := readFile(path)
@@ -19,7 +18,8 @@ func DisplayAllResultFields(path string) {
 	}
 
 	sortedFields := displaySortedFields(unmarshalledResult)
-	fmt.Println(strings.Join(removeDuplicateValues(sortedFields),  "\n"))
+	//fmt.Println(strings.Join(removeDuplicateValues(sortedFields),  "\n"))
+	return removeDuplicateValues(sortedFields)
 }
 
 func readFile(path string) []byte {
