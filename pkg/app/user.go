@@ -28,7 +28,7 @@ type User struct {
 	Role           string   `json:"role"`
 }
 
-func findUsers(path string) []User {
+func readUsersFromFile(path string) []User {
 	var obj []User
 
 	data := readFile(path)
@@ -41,41 +41,47 @@ func findUsers(path string) []User {
 }
 
 func DisplayUsersBasedOnSearchOptions(path string, searchValue int) map[string]interface{} {
-	tickets := findUsers(path)
-	var results []User
+	tickets := readUsersFromFile(path)
+	users := returnUsers(tickets, searchValue)
+
 	var outcome map[string]interface{}
 
+	for _, user := range users {
+		outcome = map[string]interface{}{
+			"_id":             user.ID,
+			"active":          user.Active,
+			"alias":           user.Alias,
+			"created_at":      user.CreatedAt,
+			"email":           user.Email,
+			"external_id":     user.ExternalId,
+			"last_login_at":   user.LastLoginAt,
+			"locale":          user.Locale,
+			"name":            user.Name,
+			"organization_id": user.OrganizationID,
+			"phone":           user.Phone,
+			"role":            user.Role,
+			"shared":          user.Shared,
+			"signature":       user.Signature,
+			"suspended":       user.Suspended,
+			"tags":            user.Tags,
+			"timezone":        user.Timezone,
+			"url":             user.Url,
+			"verified":        user.Verified,
+		}
+	}
+
+ 	return sortMapByKey(outcome)
+}
+
+func returnUsers(tickets []User, searchValue int) []User {
+	var results []User
 	for _, ticket := range tickets {
 		if ticket.ID == searchValue {
 			results = append(results, ticket)
 		}
 	}
 
-	for _, result := range results {
-		outcome = map[string]interface{}{
-			"_id":             result.ID,
-			"active":          result.Active,
-			"alias":           result.Alias,
-			"created_at":      result.CreatedAt,
-			"email":           result.Email,
-			"external_id":     result.ExternalId,
-			"last_login_at":   result.LastLoginAt,
-			"locale":          result.Locale,
-			"name":            result.Name,
-			"organization_id": result.OrganizationID,
-			"phone":           result.Phone,
-			"role":            result.Role,
-			"shared":          result.Shared,
-			"signature":       result.Signature,
-			"suspended":       result.Suspended,
-			"tags":            result.Tags,
-			"timezone":        result.Timezone,
-			"url":             result.Url,
-			"verified":        result.Verified,
-		}
-	}
-
- 	return sortMapByKey(outcome)
+	return results
 }
 
 func sortMapByKey(fields map[string]interface{}) map[string]interface{} {
