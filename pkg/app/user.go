@@ -28,7 +28,7 @@ type User struct {
 	Role           string   `json:"role"`
 }
 
-func readUsersFromFile(path string) []User {
+func readFromFile(path string) []User {
 	var obj []User
 
 	data := readFile(path)
@@ -40,10 +40,8 @@ func readUsersFromFile(path string) []User {
 	return obj
 }
 
-func DisplayUsersBasedOnSearchOptions(path string, searchValue int) map[string]interface{} {
-	tickets := readUsersFromFile(path)
-	users := returnUsers(tickets, searchValue)
-
+func DisplayUsersFromSearchOptions(path string, searchValue int) map[string]interface{} {
+	users := findUsersFromSearchInput(readFromFile(path), searchValue)
 	var outcome map[string]interface{}
 
 	for _, user := range users {
@@ -73,7 +71,7 @@ func DisplayUsersBasedOnSearchOptions(path string, searchValue int) map[string]i
  	return sortMapByKey(outcome)
 }
 
-func returnUsers(tickets []User, searchValue int) []User {
+func findUsersFromSearchInput(tickets []User, searchValue int) []User {
 	var results []User
 	for _, ticket := range tickets {
 		if ticket.ID == searchValue {

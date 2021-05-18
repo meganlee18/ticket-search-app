@@ -65,19 +65,19 @@ var rootCmd = &cobra.Command{
 					var searchValue int
 					fmt.Scanln(&searchValue)
 
-					app.DisplayUsersBasedOnSearchOptions(path, searchValue)
+					app.DisplayUsersFromSearchOptions(path, searchValue)
 				}
 			}
 
 			if searchOptions == 2 {
 				fmt.Println("----------------------\nYou can search Users with:")
-				app.DisplayAllResultFields("./files/users.json")
+				fmt.Println(app.DisplayAllResultFields("./files/users.json"))
 
 				fmt.Println("----------------------\nYou can search Tickets with:")
-				app.DisplayAllResultFields("./files/files.json")
+				fmt.Println(app.DisplayAllResultFields("./files/tickets.json"))
 
 				fmt.Println("----------------------\nYou can search Organizations with:")
-				app.DisplayAllResultFields("./files/organizations.json")
+				fmt.Println(app.DisplayAllResultFields("./files/organizations.json"))
 			}
 		},
 }
