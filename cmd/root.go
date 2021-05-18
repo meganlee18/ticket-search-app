@@ -57,11 +57,11 @@ var rootCmd = &cobra.Command{
 					//TODO: depending on search options, return search results either user, ticket or org
 					fmt.Println("Enter search term e.g _id or name")
 
-					//check search term and see if it matches field
 					var searchTerm string
 					fmt.Scanln(&searchTerm)
 
-					fmt.Println("Enter search value e.g 71")
+					fmt.Println("Enter search value")
+
 					var searchValue int
 					fmt.Scanln(&searchValue)
 
